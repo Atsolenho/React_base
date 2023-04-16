@@ -1,40 +1,35 @@
-#  Name of workflow
-name: Production workflow
+name: "ci-cd pipeline"
 
-# When workflow is triggered
-on:
+on: 
   push:
-    tags:
-      - "v*"
+    branches:
+    - main
 
-# Jobs to carry out
 jobs:
-  deploy:
-    # Operating system to run job on
+  build:
     runs-on: ubuntu-latest
-    # Steps in job
     steps:
-      # Get code from repo
-      - name: Checkout code
-        uses: actions/checkout@v1
-      # Install NodeJS
-      - name: Use Node.js 16.13.x
-        uses: actions/setup-node@v1
-        with:
-          node-version: 16.13.x
-      # Run npm install and build on our code
-      - run: npm install
-      - run: npm run build --if-present
-      # Deploy to Netlify using our production secrets
-      - name: Deploy to netlify
-        uses: netlify/actions/cli@master
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.DEV_NETLIFY_SITE_ID }}
-          SHOPIFY_DOMAIN: uoonastore.myshopify.com
-          SHOPIFY_STOREFRONT_TOKEN: 6f72a1d2317a72216d8718e937f03f8d
-          SITE_KEY: 6LdyOQklAAAAAMwCqEqpmgSzd4YKPA2LCqgpSE3Z
-          SECRET_KEY: 6LdyOQklAAAAAPio6Su6Rj80CH8nLDNU4qh_QGCu
-        with:
-          args: deploy --dir=build --prod
-          secrets: '["NETLIFY_AUTH_TOKEN", "NETLIFY_SITE_ID"]'
+    - uses: actions/checkout@v2
+    - name: Use Node.js 16.x
+      uses: actions/setup-node@v2
+      with:
+        node-version: 16.x
+        cache: 'npm'
+        cache-dependency-path: package-lock.json
+    - name: Install dependencies
+      run: npm install 
+    // - name: Run tests
+    // - run: npm test
+    - name: Build file
+      run: npm run build
+      
+
+    // deploy the application to netlify
+    - name: Deploy production to Netlify
+      uses: South-Paw/action-netlify-deploy@v1.2.0
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
+        build-dir: './dist'
+        comment-on-commit: true
