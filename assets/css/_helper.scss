@@ -1,0 +1,48 @@
+// Mixins
+// @Mixin Hide from Screen reader
+@mixin sc-reader() {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+// @Mixin Shop Color Theme
+@mixin color-theme($text, $bg-primary, $bg-secondary) {
+  background-color: $bg-primary;
+  color: $text;
+
+  a {
+    color: $text;
+  }
+
+  .btn {
+    &_primary {
+      border-color: $bg-secondary;
+      background-color: $bg-primary;
+      color: $text;
+      &:hover {
+        border-color: var(--color-light-primary);
+      }
+    }
+  }
+
+  svg {
+    fill: $text;
+  }
+  .product-footer,
+  .sf-header__wrapper {
+    background-color: $bg-primary;
+  }
+}
+.theme {
+  &_light {
+    @include color-theme($theme-default...);
+  }
+  &_blue {
+    @include color-theme($theme-blue...);
+  }
+}
