@@ -2,7 +2,7 @@ require('isomorphic-fetch');
 import webpack from 'webpack';
 const platformENV = process.env.NODE_ENV !== 'production' ? 'http' : 'https';
 const config = {
-  target: 'server',
+  target: 'static',
   buildModules: [['@edgio/nuxt/module', { edgioSourceMaps: true }]],
   server: {
     port: process.env.APP_PORT || 3001,
