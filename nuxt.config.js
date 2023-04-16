@@ -97,6 +97,9 @@ const config = {
     "@nuxtjs/recaptcha",
     "nuxt-newsletter"
   ],
+  sitemap: {
+    hostname: "https://brojenuel-blog.ml",
+  },
   
   buttondown: {
     apiKey: process.env.BUTTONDOWN_API_KEY,

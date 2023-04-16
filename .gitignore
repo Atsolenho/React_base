@@ -4,6 +4,7 @@ server
 .nuxt
 _theme
 node_modules
+dist
 tests
 .history
 package-json.lock
